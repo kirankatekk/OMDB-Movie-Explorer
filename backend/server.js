@@ -9,7 +9,21 @@ const path = require("path");
 
 async function main() {
   const app = express();
-  app.use(helmet());
+  app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", "data:", "https:", "https://m.media-amazon.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        connectSrc: ["'self'", "https:"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+        objectSrc: ["'none'"]
+      }
+    }
+  })
+);
+
   app.use(cors());
   app.use(express.json());
 
