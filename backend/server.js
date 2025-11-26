@@ -10,10 +10,10 @@ const path = require("path");
 async function main() {
   const app = express();
   app.use(helmet());
-  app.use(cors({ origin: "*" }));
+  app.use(cors());
   app.use(express.json());
 
-  const PORT = process.env.PORT || 4000;
+  const PORT = process.env.PORT;
   const omdbKey = process.env.OMDB_API_KEY;
 
   if (!omdbKey) {
@@ -48,7 +48,7 @@ async function main() {
 
   // ---- START SERVER ----
   app.listen(PORT, () => {
-    console.log(`OMDB backend listening on http://localhost:${PORT}`);
+    console.log(`OMDB backend listening on ${PORT}`);
   });
 
 }
