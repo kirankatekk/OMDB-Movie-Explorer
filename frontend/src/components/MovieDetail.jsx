@@ -4,12 +4,12 @@ import SafeImage from "./SafeImage";
 
 export default function MovieDetail({ imdbID, onClose }) {
   const [data, setData] = useState(null);
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     let cancelled = false;
 
-    axios
-      .get(`http://localhost:4000/api/movie/${imdbID}`)
+    axios.get(`${API}/movie/${imdbID}`)
       .then((r) => {
         if (!cancelled) setData(r.data.data);
       })
