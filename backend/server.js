@@ -5,16 +5,17 @@ const helmet = require("helmet");
 const cors = require("cors");
 const makeCache = require("./lib/cache");
 const makeOmdbRouter = require("./routes/omdb");
+const path = require("path");
 
 async function main() {
   const app = express();
   app.use(helmet());
   app.use(cors({ origin: "*" }));
-
   app.use(express.json());
 
   const PORT = process.env.PORT || 4000;
   const omdbKey = process.env.OMDB_API_KEY;
+
   if (!omdbKey) {
     console.error("OMDB_API_KEY missing in env");
     process.exit(1);
@@ -32,20 +33,22 @@ async function main() {
     cache,
     cacheTtlSec: parseInt(process.env.CACHE_TTL_SECONDS || "3600", 10),
   });
-  app.use("/api", omdbRouter);
 
+  // ---- API ROUTES ----
+  app.use("/api", omdbRouter);
   app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-  app.listen(PORT, () =>
-    console.log(`OMDB backend listening on http://localhost:${PORT}`)
-  );
-
-  const path = require("path");
-
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  // ---- SERVE FRONTEND BUILD ----
+  const distPath = path.join(__dirname, "../frontend/dist");
+  app.use(express.static(distPath));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+
+  // ---- START SERVER ----
+  app.listen(PORT, () => {
+    console.log(`OMDB backend listening on http://localhost:${PORT}`);
   });
 }
 
