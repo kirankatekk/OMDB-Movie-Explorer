@@ -33,7 +33,9 @@ export default function App() {
       for (const id of favorites) {
         try {
           const r = await axios.get(`http://localhost:4000/api/movie/${id}`);
-          movieList.push(r.data.data);
+          const movie = r.data?.data;
+if (movie && movie.imdbID) movieList.push(movie);
+
         } catch (e) {
           console.error("Failed to load favorite:", id, e);
         }
