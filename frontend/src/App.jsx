@@ -13,6 +13,7 @@ export default function App() {
 
   const [favorites, setFavorites] = useState([]); // list of IMDb IDs
   const [favoriteMovies, setFavoriteMovies] = useState([]); // list of full movie objects
+  const API = import.meta.env.VITE_API_BASE_URL;
 
   // Load favorites from localStorage on mount
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function App() {
 
       for (const id of favorites) {
         try {
-          const r = await axios.get(`http://localhost:4000/api/movie/${id}`);
+          const r = await axios.get(`${API}/movie/${id}`);
           const movie = r.data?.data;
 if (movie && movie.imdbID) movieList.push(movie);
 
@@ -74,7 +75,7 @@ if (movie && movie.imdbID) movieList.push(movie);
       try {
         setLoading(true);
 
-        const r = await axios.get("http://localhost:4000/api/search", {
+        const r = await axios.get(`${API}/search`, {
           params: { q: query },
           signal: controller.signal,
         });
