@@ -33,6 +33,7 @@ async function main() {
     cache,
     cacheTtlSec: parseInt(process.env.CACHE_TTL_SECONDS || "3600", 10),
   });
+  
 
   // ---- API ROUTES ----
   app.use("/api", omdbRouter);
@@ -46,10 +47,19 @@ async function main() {
     res.sendFile(path.join(distPath, "index.html"));
   });
 
+  app.use(express.static("dist"));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve("dist", "index.html"));
+});
+
+
   // ---- START SERVER ----
-  app.listen(PORT, () => {
-    console.log(`OMDB backend listening on http://localhost:${PORT}`);
-  });
+
+app.listen(PORT, () => {
+  console.log(`OMDB backend running on port ${PORT}`);
+});
+
 }
 
 main();
