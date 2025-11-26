@@ -47,10 +47,9 @@ async function main() {
   });
 
   // ---- START SERVER ----
-
-app.listen(PORT, () => {
-  console.log(`OMDB backend running on port ${PORT}`);
-});
+  app.listen(PORT, () => {
+    console.log(`OMDB backend listening on http://localhost:${PORT}`);
+  });
 
 }
 
